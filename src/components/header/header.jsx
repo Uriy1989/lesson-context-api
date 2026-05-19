@@ -1,10 +1,12 @@
 import { CurrentUser } from './components';
 
-export const Header = ({ currentUser }) => {
+//	<CurrentUser currentUser={currentUser} /> - уже ненужен проброс пропсов
+
+export const Header = () => {
 	return (
 		<div>
 			<div>Информация в шапке приложения</div>
-			<CurrentUser currentUser={currentUser} />
+			<CurrentUser />
 		</div>
 	);
 };
