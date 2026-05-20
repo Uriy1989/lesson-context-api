@@ -1,7 +1,7 @@
 import './App.css';
 import styles from './styles.module.css';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 
 import { AppContext } from './context';
 import { Header, UserBlock } from './components';
@@ -22,9 +22,35 @@ const getAnotherUserFromServer = () => ({
 	email: 'wewewew@yandex.ru',
 	phone: '+7583405843950',
 });
+//хук useReducer расширенная версия хука useState, сначало подготавлеваем , а после устанавливаем
+const reducer = (state, action) => {
+	const { type, payload } = action; //type - название действия ,payload - нагрузка (данные)
+
+	switch (type) {
+		case 'SET_USER_DATA': {
+			return payload;
+			//setUserData(payload);
+			//break;
+		}
+
+		case 'SET_USER_AGE': {
+			return { ...state, age: payload };
+			//setUserData({ ...userData, age: payload });
+			//break;
+		}
+		default:
+		//not doit
+	}
+};
 
 function App() {
 	const [userData, setUserData] = useState({});
+	//const [userData, setUserData] = useReducer({});
+
+	const dispatch = (action) => {
+		const newState = reducer(userData, action);
+		setUserData(newState); //не совсем её задача устанавливать setUserData
+	};
 
 	useEffect(() => {
 		const userDataFromServer = getUserFromServer();
@@ -42,8 +68,8 @@ function App() {
 	//		<AppContext value={useData}>
 
 	return (
-		//<AppContextProvider
-		<AppContext value={userData}>
+		//<AppContextProvider //{userData, setUserData} - обновляем состояние из любой точки приложения
+		<AppContext value={{ userData, dispatch }}>
 			<h3>Привет</h3>
 			<div>
 				<Header />
@@ -58,6 +84,8 @@ function App() {
 export default App;
 
 /*
+
+State management - процесс управление состоянием приложения, обеспечивающий их хранение, обновление и синхранизацияю между различными компонентами.
 	return (
 		//<AppContextProvider
 	
